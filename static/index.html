@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Token Exchange Service API</title>
+        <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css" />
+    </head>
+    <body>
+        <div id="swagger-ui"></div>
+        <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+        <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"></script>
+        <script>
+            window.onload = async () => {
+                const swaggerJsonFileUrl = 'swagger.json';
+
+                try {
+                    const response = await fetch(swaggerJsonFileUrl);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch swagger.json: ${response.statusText}`);
+                    }
+                    let spec = await response.json();
+
+                    // Modify the spec to include the correct server URL, to get the Swagger UI to work on any path prefix
+                    spec.host = window.location.hostname;
+                    if (window.location.port) {
+                        spec.host += ':' + window.location.port;
+                    }
+                    spec.basePath = window.location.pathname.replace(/\/$/, '');
+
+                    window.ui = SwaggerUIBundle({
+                        spec: spec,
+                        dom_id: '#swagger-ui',
+                        deepLinking: true,
+                        presets: [SwaggerUIBundle.presets.apis],
+                    });
+                } catch (error) {
+                    console.error('Error loading or processing swagger.json:', error);
+                    document.getElementById('swagger-ui').innerHTML = `Failed to load API definition: ${error.message}`;
+                }
+            };
+        </script>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+definitions:
+  main.ErrorResponse:
+    properties:
+      error:
+        example: invalid_request
+        type: string
+      error_description:
+        example: The request is missing required parameters
+        type: string
+    type: object
+  main.RequestBody:
+    properties:
+      scopes:
+        example:
+        - https://graph.microsoft.com/.default
+        items:
+          type: string
+        type: array
+      user_assertion:
+        example: eyJ0eXAiOiJKV1QiLCJhbGci...
+        type: string
+    required:
+    - scopes
+    - user_assertion
+    type: object
+  main.TokenResponse:
+    properties:
+      access_token:
+        example: eyJ0eXAiOiJKV1QiLCJhbGci...
+        type: string
+      expires_in:
+        example: 3599
+        type: integer
+      refresh_token:
+        example: 0.ARwA6WgJJ9X2qk...
+        type: string
+      scope:
+        example: https://graph.microsoft.com/.default
+        type: string
+      token_type:
+        example: Bearer
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Service for exchanging Azure AD tokens using OAuth 2.0 On-Behalf-Of
+    flow
+  title: Token Exchange Service API
+  version: "1.0"
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: Exchange a user access token for a downstream service access token
+      parameters:
+      - description: Token exchange request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Exchange token
+      tags:
+      - token
+swagger: "2.0"
