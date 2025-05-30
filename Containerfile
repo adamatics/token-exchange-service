@@ -27,7 +27,8 @@ FROM scratch
 
 WORKDIR /
 
-# Copy the binary from the builder stage
+# Copy the binary and certs from the builder stage
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /app/token-exchange-service /token-exchange-service
 
 # Copy the docs and static directories
