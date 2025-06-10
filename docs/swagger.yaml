@@ -8,6 +8,20 @@ definitions:
         example: The request is missing required parameters
         type: string
     type: object
+  main.RefreshTokenRequestBody:
+    properties:
+      refresh_token:
+        example: 0.ARwA6WgJJ9X2qk...
+        type: string
+      scopes:
+        example:
+        - https://graph.microsoft.com/.default
+        items:
+          type: string
+        type: array
+    required:
+    - refresh_token
+    type: object
   main.RequestBody:
     properties:
       adalab_token:
@@ -80,6 +94,37 @@ paths:
           schema:
             $ref: '#/definitions/main.ErrorResponse'
       summary: Exchange token
+      tags:
+      - token
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: Exchange a refresh token for a new access token. If scopes are
+        not provided, the service will use the configured default scope.
+      parameters:
+      - description: Token refresh request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.RefreshTokenRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Refresh token
       tags:
       - token
 swagger: "2.0"

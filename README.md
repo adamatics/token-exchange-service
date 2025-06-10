@@ -60,4 +60,5 @@ curl -X POST http://localhost:9000/ \
 | CLIENT_ID | Yes | - |
 | CLIENT_SECRET | Yes | - |
 | TENANT_ID | Yes | - |
+| DEFAULT_SCOPE | No | - |
 | PORT | No | 9000 |

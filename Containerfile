@@ -46,5 +46,9 @@ ENV PORT=9000
 # ENV CLIENT_SECRET - Azure AD client secret
 # ENV TENANT_ID - Azure AD tenant ID
 
+# Optional environment variables that can be provided at runtime:
+# ENV PORT - Port to run the application on
+# ENV DEFAULT_SCOPE - Default scope to use for token refresh if none is provided
+
 # Command to run the application
 ENTRYPOINT ["/token-exchange-service"]

@@ -58,6 +58,52 @@
                     }
                 }
             }
+        },
+        "/refresh": {
+            "post": {
+                "description": "Exchange a refresh token for a new access token. If scopes are not provided, the service will use the configured default scope.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Refresh token",
+                "parameters": [
+                    {
+                        "description": "Token refresh request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.RefreshTokenRequestBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.TokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -71,6 +117,27 @@
                 "error_description": {
                     "type": "string",
                     "example": "The request is missing required parameters"
+                }
+            }
+        },
+        "main.RefreshTokenRequestBody": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string",
+                    "example": "0.ARwA6WgJJ9X2qk..."
+                },
+                "scopes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "https://graph.microsoft.com/.default"
+                    ]
                 }
             }
         },
