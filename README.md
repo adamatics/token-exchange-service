@@ -44,7 +44,7 @@ Exchange a token:
 curl -X POST http://localhost:9000/ \
   -H "Content-Type: application/json" \
   -d '{
-    "user_assertion": "user_access_token",
+    "adalab_token": "adalab_access_token",
     "scopes": ["https://graph.microsoft.com/.default"]
   }'
 ```

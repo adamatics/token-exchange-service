@@ -10,18 +10,18 @@ definitions:
     type: object
   main.RequestBody:
     properties:
+      adalab_token:
+        example: eyJ0eXAiOiJKV1QiLCJhbGci...
+        type: string
       scopes:
         example:
         - https://graph.microsoft.com/.default
         items:
           type: string
         type: array
-      user_assertion:
-        example: eyJ0eXAiOiJKV1QiLCJhbGci...
-        type: string
     required:
+    - adalab_token
     - scopes
-    - user_assertion
     type: object
   main.TokenResponse:
     properties:

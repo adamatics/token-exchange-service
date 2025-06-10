@@ -17,8 +17,8 @@ import (
 
 // RequestBody is the expected JSON structure for the incoming request
 type RequestBody struct {
-	UserAssertion string   `json:"user_assertion" example:"eyJ0eXAiOiJKV1QiLCJhbGci..." binding:"required"`
-	Scopes        []string `json:"scopes" example:"https://graph.microsoft.com/.default" binding:"required"`
+	AdalabToken string   `json:"adalab_token" example:"eyJ0eXAiOiJKV1QiLCJhbGci..." binding:"required"`
+	Scopes      []string `json:"scopes" example:"https://graph.microsoft.com/.default" binding:"required"`
 }
 
 // TokenResponse represents the Azure AD token response
@@ -107,11 +107,11 @@ func handlePostRequest(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if reqBody.UserAssertion == "" {
-		log.Println("ERROR: user_assertion is missing from request")
+	if reqBody.AdalabToken == "" {
+		log.Println("ERROR: adalab_token is missing from request")
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid_request", ErrorDescription: "user_assertion is required"})
+		json.NewEncoder(w).Encode(ErrorResponse{Error: "invalid_request", ErrorDescription: "adalab_token is required"})
 		return
 	}
 	if len(reqBody.Scopes) == 0 {
@@ -126,7 +126,7 @@ func handlePostRequest(w http.ResponseWriter, r *http.Request) {
 	scope := strings.Join(reqBody.Scopes, " ")
 	log.Printf("INFO: Attempting token exchange for scopes: %v\n", scope)
 
-	tokenResp, err := exchangeToken(reqBody.UserAssertion, scope)
+	tokenResp, err := exchangeToken(reqBody.AdalabToken, scope)
 	if err != nil {
 		log.Printf("ERROR: Failed to exchange token: %v\n", err)
 		w.Header().Set("Content-Type", "application/json")

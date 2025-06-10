@@ -85,10 +85,14 @@ const docTemplate = `{
         "main.RequestBody": {
             "type": "object",
             "required": [
-                "scopes",
-                "user_assertion"
+                "adalab_token",
+                "scopes"
             ],
             "properties": {
+                "adalab_token": {
+                    "type": "string",
+                    "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
+                },
                 "scopes": {
                     "type": "array",
                     "items": {
@@ -97,10 +101,6 @@ const docTemplate = `{
                     "example": [
                         "https://graph.microsoft.com/.default"
                     ]
-                },
-                "user_assertion": {
-                    "type": "string",
-                    "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
                 }
             }
         },
