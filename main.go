@@ -51,7 +51,15 @@ func main() {
 		log.Fatal("FATAL: Environment variables CLIENT_ID, CLIENT_SECRET, and TENANT_ID must be set.")
 	}
 
-	log.Printf("INFO: Loaded configuration: clientID=%s, clientSecret=%s, tenantID=%s\n", clientID, clientSecret, tenantID)
+	// Only show the first 10 characters of clientSecret, then ellipsis
+	clientSecretDisplay := ""
+	if len(clientSecret) > 10 {
+		clientSecretDisplay = clientSecret[:10] + "..."
+	} else {
+		clientSecretDisplay = clientSecret
+	}
+
+	log.Printf("INFO: Loaded configuration: clientID=%s, clientSecret=%s, tenantID=%s\n", clientID, clientSecretDisplay, tenantID)
 	if defaultScope != "" {
 		log.Printf("INFO: Default scope is configured: defaultScope=%s\n", defaultScope)
 	}

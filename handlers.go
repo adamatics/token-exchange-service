@@ -39,14 +39,19 @@ func handleExchangeTokenRequest(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "invalid_request", "adalab_token is required", http.StatusBadRequest)
 		return
 	}
-	if len(reqBody.Scopes) == 0 {
-		log.Println("ERROR: scopes are missing from request")
-		jsonError(w, "invalid_request", "scopes are required", http.StatusBadRequest)
+
+	var scope string
+	if len(reqBody.Scopes) > 0 {
+		scope = strings.Join(reqBody.Scopes, " ")
+	} else if defaultScope != "" {
+		scope = defaultScope
+		log.Printf("INFO: No scopes provided, using default scope: %v\n", defaultScope)
+	} else {
+		log.Println("ERROR: scopes are missing from request and no default_scope is set")
+		jsonError(w, "invalid_request", "scopes are required in the request body when a default scope is not configured", http.StatusBadRequest)
 		return
 	}
 
-	// Join scopes with space for the token request
-	scope := strings.Join(reqBody.Scopes, " ")
 	log.Printf("INFO: Attempting token exchange for scopes: %v\n", scope)
 
 	tokenResp, err := exchangeToken(reqBody.AdalabToken, scope)
@@ -92,13 +97,13 @@ func handleRefreshTokenRequest(w http.ResponseWriter, r *http.Request) {
 		scope = strings.Join(reqBody.Scopes, " ")
 	} else if defaultScope != "" {
 		scope = defaultScope
+		log.Printf("INFO: No scopes provided, using default scope: %v\n", defaultScope)
 	} else {
 		log.Println("ERROR: scopes are missing from request and no default_scope is set")
 		jsonError(w, "invalid_request", "scopes are required in the request body when a default scope is not configured", http.StatusBadRequest)
 		return
 	}
 
-	// Join scopes with space for the token request
 	log.Printf("INFO: Attempting token refresh for scopes: %v\n", scope)
 
 	tokenResp, err := refreshToken(reqBody.RefreshToken, scope)
